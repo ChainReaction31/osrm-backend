@@ -5,44 +5,49 @@ Feature: Basic Distance Matrix
     Background:
         Given the profile "testbot"
         And the partition extra arguments "--small-component-size 1 --max-cell-sizes 2,4,8,16"
-  # Scenario: Testbot - Travel distance matrix of small grid
-  #       Given the node map
-  #           """
-  #           a b c
-  #           d e f
-  #           """
-
-  #       And the ways
-  #           | nodes |
-  #           | abc   |
-  #           | def   |
-  #           | ad    |
-  #           | be    |
-  #           | cf    |
-
-  #       When I request a travel distance matrix I should get
-  #           |   | a      | b      | e      | f      |
-  #           | a | 0      | 100+-1 | 200+-1 | 300+-1 |
-  #           | b | 100+-1 | 0      | 100+-1 | 200+-1 |
-  #           | e | 200+-1 | 100+-1 | 0      | 100+-1 |
-  #           | f | 300+-1 | 200+-1 | 100+-1 | 0      |
-
-    Scenario: Testbot - Travel distance matrix of minimal network
+  Scenario: Testbot - Travel distance matrix of small grid
         Given the node map
             """
-            a z   
+            a b c
+            d e f
+            """
+
+        And the ways
+            | nodes |
+            | abc   |
+            | def   |
+            | ad    |
+            | be    |
+            | cf    |
+
+        When I request a travel distance matrix I should get
+            |   | a      | b      | e      | f      |
+            | a | 0      | 100+-1 | 200+-1 | 300+-1 |
+            | b | 100+-1 | 0      | 100+-1 | 200+-1 |
+            | e | 200+-1 | 100+-1 | 0      | 100+-1 |
+            | f | 300+-1 | 200+-1 | 100+-1 | 0      |
+
+    Scenario: Testbot - Travel distance matrix of minimal network exact distances
+        Given the node map
+            """
+            a z
               b
+              c
+              d
             """
 
         And the ways
             | nodes |
             | az    |
-            | zb    |
+            | zbcd  |
 
         When I request a travel distance matrix I should get
-            |   | a      | b      |
-            | a | 0      | 400+-1 |
-            | b | 400+-1 | 0      |
+            |   |   a    |   z     |   b     |   c     |   d     |
+            | a |   0    |  100.1  |  199.5  |  298.9  |  398.3  |
+            | z |  100.1 |  0      |  99.4   |  198.8  |  298.2  |
+            | b |  199.5 |  99.4   |  0      |  99.4   |  198.8  |
+            | c |  298.9 |  198.8  |  99.4   |  0      |  99.4   |
+            | d |  398.3 |  298.2  |  198.8  |  99.4   |  0      |
 
     Scenario: Testbot - Travel distance matrix of minimal network with toll exclude
         Given the query options
